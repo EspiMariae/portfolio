@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Blog — Espi Mariae" description="Stories, patterns, and updates from Espi Mariae.">
+	<div class="blog-page">
+		<a class="blog-page__back" href="/">&larr; Home</a>
+
+		<main class="blog-page__content">
+			<h1 class="blog-page__title">Blog</h1>
+			<p class="blog-page__intro">
+				This is where stories about handmade crochet and knitting will live — new pieces, yarn
+				notes, and quiet updates from the studio.
+			</p>
+			<div class="blog-page__placeholder">
+				<p>Nothing here yet. Check back soon.</p>
+			</div>
+		</main>
+	</div>
+</Layout>
+
+<style>
+	.blog-page {
+		min-height: 100dvh;
+		padding: var(--space-md) var(--space-sm) var(--space-xl);
+		max-width: 40rem;
+		margin: 0 auto;
+	}
+
+	.blog-page__back {
+		display: inline-block;
+		margin-bottom: var(--space-lg);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--color-text-muted);
+		transition: color 0.2s ease;
+	}
+
+	.blog-page__back:hover {
+		color: var(--color-accent);
+	}
+
+	.blog-page__content {
+		background: var(--color-surface);
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl) var(--space-lg);
+		box-shadow: var(--shadow-card);
+		border: 1px solid var(--color-violet-pale);
+	}
+
+	.blog-page__title {
+		margin: 0 0 var(--space-sm);
+		font-family: var(--font-display);
+		font-size: clamp(2.25rem, 6vw, 3rem);
+		font-weight: 600;
+		color: var(--color-text);
+	}
+
+	.blog-page__intro {
+		margin: 0 0 var(--space-lg);
+		font-size: 1.0625rem;
+		line-height: 1.7;
+		color: var(--color-text-muted);
+	}
+
+	.blog-page__placeholder {
+		padding: var(--space-md) var(--space-md);
+		background: var(--color-bg-soft);
+		border-radius: var(--radius-md);
+		border: 1px dashed var(--color-violet-soft);
+		text-align: center;
+	}
+
+	.blog-page__placeholder p {
+		margin: 0;
+		font-size: 0.9375rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	@media (max-width: 640px) {
+		.blog-page__content {
+			padding: var(--space-lg) var(--space-md);
+			border-radius: var(--radius-md);
+		}
+	}
+</style>
