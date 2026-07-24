@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../utils/paths';
 ---
 
 <div class="page">
@@ -39,7 +40,7 @@
 				Cozy crochet and knitting pieces, made stitch by stitch. A quiet corner for soft textures,
 				pastel yarns, and things made slowly by hand.
 			</p>
-			<a class="hero__button" href="/blog">Visit the blog</a>
+			<a class="hero__button" href={withBase('/blog')}>Visit the blog</a>
 		</div>
 	</main>
 </div>
@@ -47,7 +48,7 @@
 <style>
 	.page {
 		position: relative;
-		min-height: 100dvh;
+		min-height: calc(100dvh - 4rem);
 		display: flex;
 		align-items: center;
 		justify-content: center;

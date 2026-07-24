@@ -4,8 +4,6 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout title="Blog — Espi Mariae" description="Stories, patterns, and updates from Espi Mariae.">
 	<div class="blog-page">
-		<a class="blog-page__back" href="/">&larr; Home</a>
-
 		<main class="blog-page__content">
 			<h1 class="blog-page__title">Blog</h1>
 			<p class="blog-page__intro">
@@ -25,20 +23,6 @@ import Layout from '../../layouts/Layout.astro';
 		padding: var(--space-md) var(--space-sm) var(--space-xl);
 		max-width: 40rem;
 		margin: 0 auto;
-	}
-
-	.blog-page__back {
-		display: inline-block;
-		margin-bottom: var(--space-lg);
-		font-size: 0.9375rem;
-		font-weight: 500;
-		text-decoration: none;
-		color: var(--color-text-muted);
-		transition: color 0.2s ease;
-	}
-
-	.blog-page__back:hover {
-		color: var(--color-accent);
 	}
 
 	.blog-page__content {

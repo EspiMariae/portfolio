@@ -1,0 +1,132 @@
+---
+interface Props {
+	title: string;
+	videos: string[];
+	interval?: number;
+}
+
+const { title, videos, interval = 5000 } = Astro.props;
+---
+
+<article class="video-gallery" data-video-gallery data-interval={interval}>
+	<h2 class="video-gallery__title">{title}</h2>
+	<div class="video-gallery__viewer">
+		{
+			videos.map((src, index) => (
+				<video
+					class:list={['video-gallery__video', { 'is-active': index === 0 }]}
+					data-video-index={index}
+					src={src}
+					muted
+					loop
+					playsinline
+					preload="metadata"
+					autoplay={index === 0}
+				/>
+			))
+		}
+	</div>
+</article>
+
+<style>
+	.video-gallery {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.video-gallery__title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: 1.375rem;
+		font-weight: 600;
+		color: var(--color-text);
+		text-align: center;
+	}
+
+	.video-gallery__viewer {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 3 / 4;
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		background: var(--color-bg-soft);
+		border: 1px solid var(--color-violet-pale);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.video-gallery__video {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.8s ease;
+		pointer-events: none;
+	}
+
+	.video-gallery__video.is-active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.video-gallery__video {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	function initVideoGalleries() {
+		document.querySelectorAll<HTMLElement>('[data-video-gallery]').forEach((gallery) => {
+			if (gallery.dataset.initialized === 'true') return;
+			gallery.dataset.initialized = 'true';
+
+			const videos = Array.from(gallery.querySelectorAll<HTMLVideoElement>('.video-gallery__video'));
+			if (videos.length === 0) return;
+
+			const interval = Number(gallery.dataset.interval) || 5000;
+			let currentIndex = 0;
+			let timerId: ReturnType<typeof setInterval> | undefined;
+
+			const showVideo = (index: number) => {
+				videos.forEach((video, i) => {
+					const isActive = i === index;
+					video.classList.toggle('is-active', isActive);
+
+					if (isActive) {
+						video.play().catch(() => {});
+					} else {
+						video.pause();
+						video.currentTime = 0;
+					}
+				});
+			};
+
+			if (videos.length === 1) {
+				videos[0].play().catch(() => {});
+				return;
+			}
+
+			showVideo(0);
+
+			timerId = setInterval(() => {
+				currentIndex = (currentIndex + 1) % videos.length;
+				showVideo(currentIndex);
+			}, interval);
+
+			document.addEventListener(
+				'astro:before-swap',
+				() => {
+					if (timerId) clearInterval(timerId);
+				},
+				{ once: true },
+			);
+		});
+	}
+
+	initVideoGalleries();
+	document.addEventListener('astro:page-load', initVideoGalleries);
+</script>
