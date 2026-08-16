@@ -1,76 +1,54 @@
----
-import Layout from '../../layouts/Layout.astro';
-import VideoGallery from '../../components/VideoGallery.astro';
-import { plushieGalleries } from '../../data/plushies';
-import { withBase } from '../../utils/paths';
----
-
-<Layout title="Plushies — Espi Mariae" description="Handmade crochet and knitted plushies, shown in short video galleries.">
-	<div class="plushies-page">
-		<header class="plushies-page__header">
-			<h1 class="plushies-page__title">Plushies</h1>
-			<p class="plushies-page__intro">
-				Soft handmade friends, captured in little moments. Each gallery cycles through short clips
-				so you can see every angle and stitch.
-			</p>
-		</header>
-
-		<div class="plushies-page__grid">
-			{
-				plushieGalleries.map((gallery) => (
-					<VideoGallery
-						title={gallery.title}
-						videos={gallery.videos.map((video) => withBase(video))}
-					/>
-				))
-			}
-		</div>
-	</div>
-</Layout>
-
-<style>
-	.plushies-page {
-		min-height: calc(100dvh - 4rem);
-		padding: var(--space-md) var(--space-sm) var(--space-xl);
-		max-width: 72rem;
-		margin: 0 auto;
-	}
-
-	.plushies-page__header {
-		margin-bottom: var(--space-lg);
-		text-align: center;
-	}
-
-	.plushies-page__title {
-		margin: 0 0 var(--space-sm);
-		font-family: var(--font-display);
-		font-size: clamp(2.25rem, 6vw, 3.25rem);
-		font-weight: 600;
-		color: var(--color-text);
-	}
-
-	.plushies-page__intro {
-		margin: 0 auto;
-		max-width: 42ch;
-		font-size: 1.0625rem;
-		line-height: 1.7;
-		color: var(--color-text-muted);
-	}
-
-	.plushies-page__grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-		gap: var(--space-lg);
-	}
-
-	@media (max-width: 640px) {
-		.plushies-page {
-			padding-bottom: var(--space-lg);
-		}
-
-		.plushies-page__grid {
-			grid-template-columns: 1fr;
-			gap: var(--space-md);
-		}
-	}
-</style>
+---
+import Layout from '../../layouts/Layout.astro';
+import PlushieCategories from '../../components/PlushieCategories.astro';
+---
+
+<Layout title="Plushies — Espi Mariae" description="Handmade crochet and knitted plushies, shown in short video galleries.">
+	<div class="plushies-page">
+		<header class="plushies-page__header">
+			<h1 class="plushies-page__title">Plushies</h1>
+			<p class="plushies-page__intro">
+				Choose a theme to explore handmade plushies. Each category opens eight short videos so
+				you can see every piece up close.
+			</p>
+		</header>
+
+		<PlushieCategories />
+	</div>
+</Layout>
+
+<style>
+	.plushies-page {
+		min-height: calc(100dvh - 4rem);
+		padding: var(--space-md) var(--space-sm) var(--space-xl);
+		max-width: 72rem;
+		margin: 0 auto;
+	}
+
+	.plushies-page__header {
+		margin-bottom: var(--space-lg);
+		text-align: center;
+	}
+
+	.plushies-page__title {
+		margin: 0 0 var(--space-sm);
+		font-family: var(--font-display);
+		font-size: clamp(2.25rem, 6vw, 3.25rem);
+		font-weight: 600;
+		color: var(--color-text);
+	}
+
+	.plushies-page__intro {
+		margin: 0 auto;
+		max-width: 46ch;
+		font-size: 1.0625rem;
+		line-height: 1.7;
+		color: var(--color-text-muted);
+	}
+
+	@media (max-width: 640px) {
+		.plushies-page {
+			padding-bottom: var(--space-lg);
+		}
+	}
+</style>

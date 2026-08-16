@@ -1,16 +1,21 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	intro: string;
+}
+
+const { title, description, intro } = Astro.props;
 ---
 
-<Layout title="Blog — Espi Mariae" description="Stories, patterns, and updates from Espi Mariae.">
-	<div class="blog-page">
-		<main class="blog-page__content">
-			<h1 class="blog-page__title">Blog</h1>
-			<p class="blog-page__intro">
-				This is where stories about handmade crochet and knitting will live — new pieces, yarn
-				notes, and quiet updates from the studio.
-			</p>
-			<div class="blog-page__placeholder">
+<Layout title={`${title} — Espi Mariae`} description={description}>
+	<div class="content-page">
+		<main class="content-page__card">
+			<h1 class="content-page__title">{title}</h1>
+			<p class="content-page__intro">{intro}</p>
+			<div class="content-page__placeholder">
 				<p>Nothing here yet. Check back soon.</p>
 			</div>
 		</main>
@@ -18,14 +23,14 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <style>
-	.blog-page {
-		min-height: 100dvh;
+	.content-page {
+		min-height: calc(100dvh - 4rem);
 		padding: var(--space-md) var(--space-sm) var(--space-xl);
 		max-width: 40rem;
 		margin: 0 auto;
 	}
 
-	.blog-page__content {
+	.content-page__card {
 		background: var(--color-surface);
 		border-radius: var(--radius-lg);
 		padding: var(--space-xl) var(--space-lg);
@@ -33,7 +38,7 @@ import Layout from '../../layouts/Layout.astro';
 		border: 1px solid var(--color-violet-pale);
 	}
 
-	.blog-page__title {
+	.content-page__title {
 		margin: 0 0 var(--space-sm);
 		font-family: var(--font-display);
 		font-size: clamp(2.25rem, 6vw, 3rem);
@@ -41,22 +46,22 @@ import Layout from '../../layouts/Layout.astro';
 		color: var(--color-text);
 	}
 
-	.blog-page__intro {
+	.content-page__intro {
 		margin: 0 0 var(--space-lg);
 		font-size: 1.0625rem;
 		line-height: 1.7;
 		color: var(--color-text-muted);
 	}
 
-	.blog-page__placeholder {
-		padding: var(--space-md) var(--space-md);
+	.content-page__placeholder {
+		padding: var(--space-md);
 		background: var(--color-bg-soft);
 		border-radius: var(--radius-md);
 		border: 1px dashed var(--color-violet-soft);
 		text-align: center;
 	}
 
-	.blog-page__placeholder p {
+	.content-page__placeholder p {
 		margin: 0;
 		font-size: 0.9375rem;
 		color: var(--color-text-muted);
@@ -64,7 +69,7 @@ import Layout from '../../layouts/Layout.astro';
 	}
 
 	@media (max-width: 640px) {
-		.blog-page__content {
+		.content-page__card {
 			padding: var(--space-lg) var(--space-md);
 			border-radius: var(--radius-md);
 		}

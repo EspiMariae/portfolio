@@ -1,0 +1,261 @@
+---
+import { plushieCategories } from '../data/plushies';
+import { withBase } from '../utils/paths';
+
+const categories = plushieCategories.map((category) => ({
+	...category,
+	videos: category.videos.map((video) => withBase(video)),
+}));
+---
+
+<section class="plushie-categories" data-plushie-categories>
+	<div class="plushie-categories__tabs" role="tablist" aria-label="Plushie categories">
+		{
+			categories.map((category, index) => (
+				<button
+					type="button"
+					class:list={['plushie-categories__tab', { 'is-active': index === 0 }]}
+					role="tab"
+					id={`tab-${category.id}`}
+					aria-controls={`panel-${category.id}`}
+					aria-selected={index === 0}
+					data-category-tab={category.id}
+				>
+					{category.title}
+				</button>
+			))
+		}
+	</div>
+
+	{
+		categories.map((category, index) => (
+			<div
+				class:list={['plushie-categories__panel', { 'is-active': index === 0 }]}
+				role="tabpanel"
+				id={`panel-${category.id}`}
+				aria-labelledby={`tab-${category.id}`}
+				data-category-panel={category.id}
+				hidden={index !== 0}
+			>
+				<h2 class="plushie-categories__panel-title">{category.title}</h2>
+				<div class="plushie-categories__grid">
+					{
+						category.videos.map((src, videoIndex) => (
+							<div class="plushie-categories__video-wrap">
+								<video
+									class="plushie-categories__video"
+									src={src}
+									muted
+									loop
+									playsinline
+									preload="metadata"
+									autoplay={index === 0}
+								/>
+								<span class="plushie-categories__video-label">{videoIndex + 1}</span>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		))
+	}
+</section>
+
+<style>
+	.plushie-categories__tabs {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--space-xs);
+		margin-bottom: var(--space-lg);
+	}
+
+	.plushie-categories__tab {
+		padding: 0.6rem 1.25rem;
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--color-text-muted);
+		background: var(--color-surface);
+		border: 1px solid var(--color-violet-pale);
+		border-radius: var(--radius-full);
+		cursor: pointer;
+		transition:
+			color 0.2s ease,
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.plushie-categories__tab:hover {
+		color: var(--color-accent);
+		border-color: var(--color-violet-soft);
+		background: var(--color-violet-pale);
+	}
+
+	.plushie-categories__tab.is-active {
+		color: #fff;
+		background: linear-gradient(135deg, var(--color-violet) 0%, var(--color-accent) 100%);
+		border-color: transparent;
+		box-shadow: var(--shadow-soft);
+	}
+
+	.plushie-categories__tab:focus-visible {
+		outline: 2px solid var(--color-violet);
+		outline-offset: 3px;
+	}
+
+	.plushie-categories__panel {
+		display: none;
+		animation: fade-in 0.35s ease;
+	}
+
+	.plushie-categories__panel.is-active {
+		display: block;
+	}
+
+	.plushie-categories__panel-title {
+		margin: 0 0 var(--space-md);
+		font-family: var(--font-display);
+		font-size: clamp(1.75rem, 4vw, 2.25rem);
+		font-weight: 600;
+		color: var(--color-text);
+		text-align: center;
+	}
+
+	.plushie-categories__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+		gap: var(--space-md);
+	}
+
+	.plushie-categories__video-wrap {
+		position: relative;
+		border-radius: var(--radius-md);
+		overflow: hidden;
+		background: var(--color-bg-soft);
+		border: 1px solid var(--color-violet-pale);
+		box-shadow: var(--shadow-soft);
+		aspect-ratio: 3 / 4;
+	}
+
+	.plushie-categories__video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.plushie-categories__video-label {
+		position: absolute;
+		top: 0.5rem;
+		left: 0.5rem;
+		min-width: 1.5rem;
+		padding: 0.15rem 0.45rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--color-text);
+		background: rgba(255, 255, 255, 0.85);
+		border-radius: var(--radius-full);
+		text-align: center;
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.plushie-categories__tabs {
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			overflow-x: auto;
+			padding-bottom: 0.25rem;
+			-webkit-overflow-scrolling: touch;
+			scrollbar-width: none;
+		}
+
+		.plushie-categories__tabs::-webkit-scrollbar {
+			display: none;
+		}
+
+		.plushie-categories__grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: var(--space-sm);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.plushie-categories__panel {
+			animation: none;
+		}
+	}
+</style>
+
+<script>
+	function pausePanelVideos(panel: HTMLElement) {
+		panel.querySelectorAll<HTMLVideoElement>('.plushie-categories__video').forEach((video) => {
+			video.pause();
+			video.currentTime = 0;
+		});
+	}
+
+	function playPanelVideos(panel: HTMLElement) {
+		panel.querySelectorAll<HTMLVideoElement>('.plushie-categories__video').forEach((video) => {
+			video.play().catch(() => {});
+		});
+	}
+
+	function initPlushieCategories() {
+		document.querySelectorAll<HTMLElement>('[data-plushie-categories]').forEach((root) => {
+			if (root.dataset.initialized === 'true') return;
+			root.dataset.initialized = 'true';
+
+			const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-category-tab]'));
+			const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-category-panel]'));
+
+			const activate = (categoryId: string) => {
+				tabs.forEach((tab) => {
+					const isActive = tab.dataset.categoryTab === categoryId;
+					tab.classList.toggle('is-active', isActive);
+					tab.setAttribute('aria-selected', String(isActive));
+				});
+
+				panels.forEach((panel) => {
+					const isActive = panel.dataset.categoryPanel === categoryId;
+
+					if (isActive) {
+						panel.classList.add('is-active');
+						panel.removeAttribute('hidden');
+						playPanelVideos(panel);
+					} else {
+						panel.classList.remove('is-active');
+						panel.setAttribute('hidden', '');
+						pausePanelVideos(panel);
+					}
+				});
+			};
+
+			tabs.forEach((tab) => {
+				tab.addEventListener('click', () => {
+					const categoryId = tab.dataset.categoryTab;
+					if (categoryId) activate(categoryId);
+				});
+			});
+
+			const initialPanel = panels.find((panel) => panel.classList.contains('is-active'));
+			if (initialPanel) playPanelVideos(initialPanel);
+		});
+	}
+
+	initPlushieCategories();
+	document.addEventListener('astro:page-load', initPlushieCategories);
+</script>
